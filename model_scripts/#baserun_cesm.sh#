@@ -1,0 +1,19 @@
+#!/bin/bash
+# Try to run the basic case of the model
+# give a run name as an input
+
+export CASE=$1
+export CASEROOT=$HOME/cesmruns/$CASE
+export MACH=computecanada
+export RES=f19_g16
+export COMPSET=2000_CAM5_CLM40_CICE_DOCN%SOM_SGLC
+module load cesm
+create_newcase --case $CASEROOT --user_compset $COMPSET --mach $MACH --res $RES 
+
+
+
+
+
+
+
+
