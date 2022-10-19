@@ -126,8 +126,6 @@ for CASENAME in casenames:
         Lon = lon
         Qvar = np.squeeze(Qvar)
         Qvar, Lon = add_cyclic_point(Qvar, coord=lon)
-
-        print(np.shape(Cvar))
         
         # Normalize responses with respect to their radiative forcings. If you wish to see raw doubling responses, set "normalize" to False.
         if normalize is True:
@@ -163,8 +161,10 @@ for CASENAME in casenames:
         ax2.coastlines()
         #ax2.add_feature(cartopy.feature.LAND, zorder=100, edgecolor='k')
         if i == 0:
-            #plt.title('Response to $CO_2$ Doubling',fontsize=18)
-            plt.title('Response to $F_2$$_x$',fontsize=18)
+            if normalize is False:
+                plt.title('Response to $CO_2$ Doubling',fontsize=18)
+            else:
+                plt.title('Response to $F_2$$_x$',fontsize=18)
         if i == 1:
             cticks=np.around(np.linspace(-20,20,5),decimals=2)
             cbar_ax = fig.add_axes([0.22,-0.05,0.15,0.02])
@@ -194,8 +194,10 @@ for CASENAME in casenames:
         ax4.coastlines()
         #ax4.add_feature(cartopy.feature.LAND, zorder=100, edgecolor='k')
         if i == 0:
-            #plt.title('Response to $CO_2$ Quadrupling',fontsize=18)
-            plt.title('Response to $F_4$$_x$',fontsize=18)
+            if normalize is False:
+                plt.title('Response to $CO_2$ Quadrupling',fontsize=18)
+            else:
+                plt.title('Response to $F_4$$_x$',fontsize=18)
         if i == 0:
             cticks=np.around(np.linspace(-20,20,5),decimals=2)
             cbar_ax = fig.add_axes([0.62,-0.05,0.15,0.02])
@@ -220,23 +222,18 @@ for CASENAME in casenames:
             #cb3.formatter.set_powerlimits((0,0))
             #cb5.set_ticklabels(cticks.astype(str),fontsize=12)
             cb5.set_ticklabels(cticks.astype(int).astype(str),fontsize=12)
-        #if i == 2:
-         #   ax = fig.add_subplot(4,3,7,projection=ccrs.PlateCarree())
-          #  cs = ax.contourf(Lon,lat,Cvar1,60,transform=ccrs.PlateCarree(),cmap='gist_heat',vmin=0,vmax=0.2)
-           # ax.coastlines()
-            #ax.set_ylabel('Solar Multiplier: '+CASENAME)
-            #cticks=np.around(np.linspace(0,0.2,6),decimals=2)
-            #cbar_ax = fig.add_axes([0.01,0.225,0.01,0.2])
-            #cb4 = fig.colorbar(cs, spacing='proportional',orientation='vertical',cax=cbar_ax,ticks=cticks,ticklocation='left')
-            #cb4.set_ticklabels(cticks.astype(str),fontsize=6)
-                #cb3.formatter.set_powerlimits((0,0))
         i = i+1
     else:
         print('No such file or directory: '+dsloc_control+' or '+dsloc_4xco2)
 
 #    cb.set_label('Temperature (K)')
-#plt.suptitle('Surface Temperature Response to $CO_2$ Doubling',fontsize=24)
-plt.suptitle('Surface Temperature Response to Equivalent Radiative Forcing',fontsize=24)
+if normalize is False:
+    plt.suptitle('Surface Temperature Response to $CO_2$ Doubling',fontsize=24)
+else:
+    plt.suptitle('Surface Temperature Response to Equivalent Radiative Forcing',fontsize=24)
 fig.tight_layout(pad=0.2)
 plt.show()
-fig.savefig(figure_path+'map_TS_n_response.pdf',bbox_inches='tight')
+if normalize is False:
+    fig.savefig(figure_path+'map_TS_response.pdf',bbox_inches='tight')
+else:
+    fig.savefig(figure_path+'map_TS_n_response.pdf',bbox_inches='tight')
