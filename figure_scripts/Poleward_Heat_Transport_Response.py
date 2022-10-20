@@ -20,8 +20,8 @@ import climlab
 from climlab import constants as const
 
 casenames = ['0.9','0.95','1.0','1.05']
-figure_path = '/home/brandonsmith/climate-gcm-bps/plots/'
-normalize = True
+figure_path = '/home/brandonsmith/climate_state_thesis/figures/'
+normalize = False
 
 # For creating smaller file for plotting. Opening parent model output data is too bulky.
 for CASENAME in casenames:
@@ -280,8 +280,10 @@ for CASENAME in casenames:
     ax2.set_yticks(ydiffticks)
     ax2.set_yticklabels(ydiffticks,fontsize=14)
     if i == 0:
-        #ax2.set_title('$F_2$$_x$ Response',fontsize=16)
-        ax2.set_title('$CO_2$ Doubling Response',fontsize=16)
+        if normalize is True:
+            ax2.set_title('$F_2$$_x$ Response',fontsize=16)
+        else:
+            ax2.set_title('$CO_2$ Doubling Response',fontsize=16)
     if i == 3:
         ax2.set_xlabel('Latitude (Deg N)',fontsize=16)
     ax2.set_xticks(ticks)
@@ -319,8 +321,10 @@ for CASENAME in casenames:
     ax4.set_yticks(ydiffticks)
     ax4.set_yticklabels(ydiffticks,fontsize=14)
     if i == 0:
-        #ax4.set_title('$F_4$$_x$ Response',fontsize=16)
-        ax4.set_title('$CO_2$ Quadrupling Response',fontsize=16)
+        if normalize is True:
+            ax4.set_title('$F_4$$_x$ Response',fontsize=16)
+        else:
+            ax4.set_title('$CO_2$ Quadrupling Response',fontsize=16)
     if i == 3:
         ax4.set_xlabel('Latitude (Deg N)',fontsize=16)
     ax4.set_xticks(ticks)
@@ -348,11 +352,15 @@ for CASENAME in casenames:
     ax5.grid()
 
     i +=1
-    
-fig.suptitle('Poleward Heat Transport Response to $CO_2$ Doubling',fontsize=24)
-#fig.suptitle('Poleward Heat Transport Response to Equivalent Radiative Forcing',fontsize=24)
+if normalize is False:
+    fig.suptitle('Poleward Heat Transport Response to $CO_2$ Doubling',fontsize=24)
+else:
+    fig.suptitle('Poleward Heat Transport Response to Equivalent Radiative Forcing',fontsize=24)
 
 handles, labels = ax.get_legend_handles_labels()
 fig.legend(handles,labels,loc = (0.35, 0.92), ncol=5 )
-
-fig.savefig(figure_path+'Poleward_Heat_Transport_2x_Response.pdf',bbox_inches='tight')
+plt.show()
+if normalize is False:
+    fig.savefig(figure_path+'Poleward_Heat_Transport_2x_Response.pdf',bbox_inches='tight')
+else:
+    fig.savefig(figure_path+'Poleward_Heat_Transport_n_Response.pdf',bbox_inches='tight')

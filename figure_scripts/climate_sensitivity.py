@@ -17,10 +17,10 @@ SOLIN = 'SOLIN'
 co2vmr = 'co2vmr'
 FSNT = 'FSNT'
 FLNT = 'FLNT'
-filebase = '/home/brandonsmith/modeloutput/'
+filebase = '/home/brandonsmith/modeloutput/' #change file base to wherever model output is located
 outfilebase = 'ts_co2_'
 casenames = ['0.9','0.95','1.0','1.05']
-figure_path = '/home/brandonsmith/climate-gcm-bps/plots/'
+figure_path = '/home/brandonsmith/climate_state_thesis/figures/'
 
 run = 'Control'
 # calc temp control
@@ -31,10 +31,8 @@ for CASENAME in casenames:
         if os.path.isdir(filebase+run+'/'+CASENAME):
             infile = filebase + run+'/'+CASENAME+'/Merged_'+run+'_'+CASENAME+'.nc'
             infile_control = '/home/brandonsmith/modeloutput/Control/1.0/Merged_Control_1.0.nc'
-            syscall = 'cdo fldmean -timmean -seltimestep,-360/-1 -select,name='+field+','+SOLIN+','+co2vmr+','+FSNT+','+FLNT+' '+infile+' '+outfile
+            syscall = '/usr/bin/cdo fldmean -timmean -seltimestep,-360/-1 -select,name='+field+','+SOLIN+','+co2vmr+','+FSNT+','+FLNT+' '+infile+' '+outfile
             print(syscall)
-
-
 run = '2xCO2'
 for CASENAME in casenames:
     outfile = filebase+run+'/'+ CASENAME+'/'+outfilebase+CASENAME+'.nc'
@@ -43,7 +41,7 @@ for CASENAME in casenames:
         if os.path.isdir(filebase+run+'/'+CASENAME):
             infile = filebase + run+'/'+CASENAME+'/Merged_'+run+'_'+CASENAME+'_.nc'
             # merge files and calc TS global average per month
-            syscall = 'cdo fldmean -timmean -seltimestep,-360/-1 -select,name='+field+','+SOLIN+','+co2vmr+','+FSNT+','+FLNT+' '+infile+' '+outfile
+            syscall = '/usr/bin/cdo fldmean -timmean -seltimestep,-360/-1 -select,name='+field+','+SOLIN+','+co2vmr+','+FSNT+','+FLNT+' '+infile+' '+outfile
             print(syscall)
 run = '4xCO2'
 for CASENAME in casenames:
@@ -53,15 +51,15 @@ for CASENAME in casenames:
         if os.path.isdir(filebase+run+'/'+CASENAME):
             infile = filebase + run+'/'+CASENAME+'/Merged_'+run+'_'+CASENAME+'_.nc'
             # merge files and calc TS global average per month
-            syscall = 'cdo fldmean -timmean -seltimestep,-360/-1 -select,name='+field+','+SOLIN+','+co2vmr+','+FSNT+','+FLNT+' '+infile+' '+outfile
+            syscall = '/usr/bin/cdo fldmean -timmean -seltimestep,-360/-1 -select,name='+field+','+SOLIN+','+co2vmr+','+FSNT+','+FLNT+' '+infile+' '+outfile
             print(syscall)
-    
+# ONCE LINES ARE PRINTED, COPY OVER TO A SHELL SCRIPT ON A SERVER WHERE CLIMATE DATA OPERATORS IS INSTALLED AND RUN TO CREATE THE FILES.
+# ALTERNATIVELY, REPLACE print() STATEMENTS WITH os.system() FUNCTION CALL TO CALL DIRECTLY TO COMMAND LINE.
 
-#create plot
+# Constants derived from Byrne and Goldblatt (2014)
 C0 = 0.000278
 a = 0.39
 b = 5.32
-sens = 0.5 #K/w/m^2
 
 
 cn = []
@@ -71,8 +69,6 @@ quadrupled = []
 co2 = []
 co2_2x = []
 co2_4x = []
-Fbg = []
-F_net = []
 i=0
 #plot the data
 for CASENAME in casenames:
@@ -126,7 +122,6 @@ diff = np.array(diff)
 F0 = a*(np.log(co2/C0))**2+b*(np.log(co2/C0))
 F0_2 = a*(np.log(co2_2x/C0))**2+b*(np.log(co2_2x/C0))
 F0_4 = a*(np.log(co2_4x/C0))**2+b*(np.log(co2_4x/C0))
-dF = diff/sens
 Fn = F0_2 - F0 # Added Radiative Forcing per CO2 doubling
 Fn_4 = F0_4 - F0 # Added Radiative Forcing per CO2 quadrupling
 
@@ -153,51 +148,7 @@ ax1.set_yticks(np.linspace(286,302,5))
 ax1.set_yticklabels(np.linspace(286,302,5).astype(int).astype(str),fontsize=8)
 ax1.grid(True)
 #ax1.legend(['$2xCO_2$','$4xCO_2$'],loc='upper right',ncol=2,prop={'size':5})
-'''
-ax2 = plt.subplot(312)
-ax2.plot(cn, CO2bg, marker='.',color='blue',alpha=0.7)
-ax2.plot(cn, Next_co2, marker='.',color='green',alpha=0.7)
-ax2.set_ylabel(' CO2 volume mixing ratio (ppmv)',fontsize=8)
-ax2.set_yscale('log')
-ax2.set_xticks([0.9,0.95,1.0,1.05])
-ax2.set_xticklabels(casenames)
-ax2.set_yticks([10,100,1000,10000])
-ax2.set_yticklabels(['10¹','10²','10³','10⁴'])
-ax2.set_xlim(0.89,1.06)
-ax2.set_ylim(0,40000)
-ax2.grid(True)
-ax2.legend(['Byrne Goldblatt 2014','next guess'])
 
-
-ax3 = plt.subplot(313)
-ax3.plot(cn, ratio, marker='.', color='black',alpha=0.7)
-ax3.hlines(0,0.8,1.1)
-ax3.set_ylabel('Change in CO2 (ppmv)',fontsize=8)
-ax3.set_xticks([0.9,0.95,1.0,1.05])
-ax3.set_xticklabels(casenames)
-#ax3.set_yticks([-30,-25,-20,-15,-10,-5,0,5,10,15,20,25,30])
-ax3.set_xlim(0.89,1.06)
-#ax3.set_ylim(-35,35)
-#ax3.set_yticks(numpy.linspace(-0.04,0.04,9))
-ax3.grid(True)
-
-ax3 = plt.subplot(312)
-ax3.plot(cn2, F0_4[1:], marker='.',color='magenta',alpha=0.7)
-ax3.plot(cn, F0_2, marker='.', color='red',alpha=0.7)
-ax3.plot(cn, F0, marker='.', color='blue',alpha=0.7)
-#ax3.plot(cn, F0, marker='.', color='black',alpha=0.7)
-#ax3.hlines(0,0.8,1.1)
-ax3.set_title('Imposed Radiative Forcing from $CO_2$ Doubling (Byrne & Goldblatt 2014)',fontsize=10)
-ax3.set_ylabel('Flux (W/m²)',fontsize=8)
-ax3.set_xticks([0.9,0.95,1.0,1.05])
-ax3.set_xticklabels(co2_str)
-ax3.set_yticks(np.linspace(-10,25,8))
-ax3.set_yticklabels(np.linspace(-10,25,8).astype(int).astype(str),fontsize=7)
-#ax3.set_title('Net Longwave Flux at TOM',fontsize=10)
-ax3.set_xlim(0.89,1.06)
-ax3.grid(True)
-ax3.legend(['$4xCO_2$','$2xCO_2$','Base'],loc='lower left',prop={'size':5})
-'''
 ax4 = fig.add_subplot(312)
 ax4.plot(cn, diff, '.', color='blue',alpha=0.7,label='$2xCO_2$')
 ax4.plot(cn,diff_4, '.',color='red', alpha=0.7,label='$4xCO_2$')
@@ -234,8 +185,6 @@ fig.tight_layout(pad=0.5)
 
 #plt.axis([0.89, 1.04, -52,-40])
 plt.show()
-
-
 
 fig2 = plt.figure()
 
