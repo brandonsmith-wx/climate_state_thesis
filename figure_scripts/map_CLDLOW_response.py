@@ -15,7 +15,7 @@ from matplotlib.colors import Normalize
 import cartopy.crs as ccrs
 from cartopy.util import add_cyclic_point
 
-figure_path = '/home/brandonsmith/climate-gcm-bps/plots/'
+figure_path = '/home/brandonsmith/climate_state_thesis/figures/'
 casenames = ['0.9','0.95','1.0','1.05']
 
 field = 'CLDLOW'
