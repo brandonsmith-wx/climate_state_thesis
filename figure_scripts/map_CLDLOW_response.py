@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 #
-# Script for plotting figure 3.7. for altercation, make necessary comments and uncomments
+# Script for plotting figure 3.9. for altercation, make necessary comments and uncomments
 # of particular axes settings in the plotting section.
 #
 
@@ -20,6 +20,7 @@ casenames = ['0.9','0.95','1.0','1.05']
 
 field = 'CLDLOW'
 field2 = 'CLDHGH'
+normalize = True
 for CASENAME in casenames:
     run = 'Control'
     inpath = '/home/brandonsmith/modeloutput/'+run+'/'+CASENAME

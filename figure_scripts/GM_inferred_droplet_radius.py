@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 #
-# Script for plotting figure 3.22. for altercation, make necessary comments and uncomments
+# Script for plotting figure 3.20. for altercation, make necessary comments and uncomments
 # of particular axes settings in the plotting section.
 #
 

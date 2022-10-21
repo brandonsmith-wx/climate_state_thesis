@@ -2,7 +2,7 @@
 ###################################################################################################################################################
 
 #
-# Script for plotting figure 3.6. for altercation, make necessary comments and uncomments
+# Script for plotting figure 3.8. for altercation, make necessary comments and uncomments
 # of particular axes settings in the plotting section.
 #
 
@@ -17,12 +17,12 @@ from matplotlib.colors import Normalize
 from matplotlib import cm
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 
-figure_path = '/home/brandonsmith/climate-gcm-bps/plots/'
+figure_path = '/home/brandonsmith/climate_state_thesis/figures/'
 casenames = ['0.9','0.95','1.0','1.05']
 
 field2 = 'CLOUD'
 field = 'CLOUD'
-normalize = True
+normalize = False
 # For creating smaller file for plotting. Opening parent model output data is too bulky.
 for CASENAME in casenames:
     run = 'Control'
@@ -45,8 +45,6 @@ for CASENAME in casenames:
         if os.path.isfile(inpath+infile):
             syscall = '/usr/bin/cdo timmean -zonmean -seltimestep,-360/-1 -select,name='+field+','+field2+' '+ inpath+infile+' '+ outpath+outfile_control
             print(syscall)
-            #syscall = 'cdo mastrfu '+outpath+outfile_2xco2+' '+outpath+outfile_2xco2_stf
-            #os.system(syscall)
     run = '4xCO2'
     inpath = '/home/brandonsmith/modeloutput/'+run+'/'+CASENAME
     infile = '/Merged_'+run+'_'+CASENAME+'.nc'
@@ -57,16 +55,16 @@ for CASENAME in casenames:
         if os.path.isfile(inpath+infile):
             syscall = '/usr/bin/cdo timmean -zonmean -seltimestep,-360/-1 -select,name='+field+','+field2+' '+ inpath+infile+' '+ outpath+outfile_control
             print(syscall)
-            #syscall = 'cdo mastrfu '+outpath+outfile_4xco2+' '+outpath+outfile_4xco2_stf
-            #os.system(syscall)
+# ONCE LINES ARE PRINTED, COPY OVER TO A SHELL SCRIPT ON A SERVER WHERE CLIMATE DATA OPERATORS IS INSTALLED AND RUN TO CREATE THE FILES.
+# ALTERNATIVELY, REPLACE print() STATEMENTS WITH os.system() FUNCTION CALL TO CALL DIRECTLY TO COMMAND LINE.
 # Load variables and perform calculations from outfiles
 i = 0
 fig = plt.figure(figsize=(20,10))
 outfile_1C = '/home/brandonsmith/modeloutput/Control/1.0/ZM_CLOUD_Control_1.0.nc'
 outfile_1D = '/home/brandonsmith/modeloutput/2xCO2/1.0/ZM_CLOUD_2xCO2_1.0.nc'
 outfile_1Q = '/home/brandonsmith/modeloutput/4xCO2/1.0/ZM_CLOUD_4xCO2_1.0.nc'
-rf = [5.53394852, 4.72283731, 3.88779531, 2.78457941]
-rfq = [11.4426504, 9.82042797, 8.15034396, 5.94391217]
+rf = [5.53394852, 4.72283731, 3.88779531, 2.78457941] #defined radiative forcing from doubling CO2 (Byrne and Goldblatt (2014))
+rfq = [11.4426504, 9.82042797, 8.15034396, 5.94391217] #defined radiative forcing from quadrupling CO2 (Byrne and Goldblatt (2014))
 for CASENAME in casenames:
     outfile_2xco2 = '/ZM_CLOUD_2xCO2_'+CASENAME+'.nc'
     outfile_control = '/ZM_CLOUD_Control_'+CASENAME+'.nc'
@@ -79,7 +77,8 @@ for CASENAME in casenames:
     dsloc_4xco2 = outpath_4xco2+outfile_4xco2
 
     if os.path.isfile(dsloc_control) and os.path.isfile(dsloc_2xco2):
-
+        
+        # Load Variables
         dsc = netCDF4.Dataset(dsloc_control)
         Cvar= dsc.variables[field][:]
         lat = dsc.variables['lat'][:]
@@ -94,10 +93,6 @@ for CASENAME in casenames:
         dsq = netCDF4.Dataset(dsloc_4xco2)
         Qvar = dsq.variables[field][:]
         dsq.close()
-        #dsq = netCDF4.Dataset(dsloc_4xco2)
-        #Qvar = dsq.variables['mastrfu'][:]
-            # no need to reload lat/lon
-        #dsq.close()
 
         C1 = netCDF4.Dataset(outfile_1C)
         Cvar1 = C1.variables[field][:]
@@ -116,7 +111,7 @@ for CASENAME in casenames:
         Dvar = Dvar.squeeze()
         Qvar = Qvar.squeeze()
 
-
+        # Normalize responses with respect to their radiative forcings. If you wish to see raw doubling responses, set "normalize" to False.
         if normalize is True:
             doubling_response = rf[2]*(Dvar - Cvar)/rf[i]
             diff = doubling_response - (Dvar1 - Cvar1)
@@ -128,23 +123,6 @@ for CASENAME in casenames:
             Quad_response = (Qvar-Cvar)
             Qdiff = Quad_response - (Qvar1-Cvar1)
 
-        #EKE_200hpa = EKE[:,:,:]
-        #diff_200hpa = diff[:,:,:]
-
-        # Remove the middle 40% of the RdBu_r colormap
-
-        BrBG = cm.get_cmap('BrBG',256)
-        new_BrBG = BrBG(np.linspace(0,1,256))
-        colors = plt.cm.BrBG((0,0.5))
-        cmap = LinearSegmentedColormap.from_list('name', colors)
-        top = cm.get_cmap(cmap, 128)
-        bottom = cm.get_cmap('Blues', 128)
-        newcolors = np.vstack((top(np.linspace(0, 1, 128)),bottom(np.linspace(0, 1, 128))))
-        newcmp = ListedColormap(newcolors, name='BrBu')
-
-
-
-        diff = diff.squeeze()
         Casenames = ['90% $S_0$','95% $S_0$','$S_0$','105% $S_0$']
         #plot variable
         ax = fig.add_subplot(4,5,5*i+1)
@@ -186,8 +164,10 @@ for CASENAME in casenames:
         plt.gca().invert_yaxis()
         ax2.set_xticks(np.linspace(-90,90,7),fontsize=12)
         if i == 0:
-            ax2.set_title('Response to $CO_2$ Doubling',fontsize=16)
-            #ax2.set_title('Response to $F_2$$_x$',fontsize=16)
+            if normalize is False:
+                plt.title('Response to $CO_2$ Doubling',fontsize=16)
+            else:
+                plt.title('Response to $F_2$$_x$',fontsize=16)
             #cticks=np.linspace(-50,50,11)
             cticks=np.around(np.linspace(-0.1,0.1,5),decimals=2)
             cbar_ax = fig.add_axes([0.22,-0.05,0.18,0.02])
@@ -238,8 +218,10 @@ for CASENAME in casenames:
         plt.gca().invert_yaxis()
         ax4.set_xticks(np.linspace(-90,90,7),fontsize=12)
         if i == 0:
-            ax4.set_title('Response to $CO_2$ Quadrupling',fontsize=16)
-            #ax4.set_title('Response to $F_4$$_x$',fontsize=16)
+            if normalize is False:
+                plt.title('Response to $CO_2$ Quadrupling',fontsize=16)
+            else:
+                plt.title('Response to $F_4$$_x$',fontsize=16)
             #cticks=np.linspace(-50,50,11)
             cticks=np.around(np.linspace(-0.1,0.1,5),decimals=2)
             cbar_ax = fig.add_axes([0.62,-0.05,0.18,0.02])
@@ -283,19 +265,15 @@ for CASENAME in casenames:
         i = i+1
     else:
         print('No such file or directory:'+dsloc_control)
-fig.suptitle('Zonal Mean Cloud Fraction Response to $CO_2$ Doublings',y=1.01,fontsize=24)
-#fig.suptitle('Zonal Mean Cloud Fraction Response to Equivalent Radiative Forcing',y=1.01,fontsize=24)
+if normalize is False:
+    fig.suptitle('Zonal Mean Cloud Fraction Response to $CO_2$ Doublings',y=1.01,fontsize=24)
+else:
+    fig.suptitle('Zonal Mean Cloud Fraction Response to Equivalent Radiative Forcing',y=1.01,fontsize=24)
 fig.tight_layout(pad=0.2)
 fig.text(-0.02, 0.5, 'Hybrid Sigma-Pressure Level (mb)', va='center', rotation='vertical',fontsize=16)
-#fig.text(0.35, -0.04, 'Latitude (degrees North)', va='center', rotation='horizontal',fontsize=12)
-#cbar_ax = fig.add_axes([1.02,0.15,0.02,0.6])
-#cb = fig.colorbar(cs, spacing='proportional',orientation='vertical',cax=cbar_ax)
-#cb.ax.set_yticklabels(['-10','-7.5','-5','-2.5','0','2.5','5','7.5','10'])  # horizontal colorbar
-#cb.set_label('Convective Cloud Cover',fontsize=8)
-#plt.xlabel('Latitude (Deg N)')
-#    plt.suptitle('Difference in Zonal Mean Streamfunction Between Solar-$CO_2$ Pair and Present Day, 2x$CO_2$',fontsize=20)
-#    fig.suptitle('Zonal Mean Streamfunction Between Control and 2x$CO_2$',fontsize=12)
 plt.show()
-fig.savefig(figure_path+'Zonal_Mean_CLOUD_2x_response.pdf',bbox_inches='tight')
-
+if normalize is False:
+    fig.savefig(figure_path+'Zonal_Mean_CLOUD_2x_response.pdf',bbox_inches='tight')
+else:
+    fig.savefig(figure_path+'Zonal_Mean_CLOUD_n_response.pdf',bbox_inches='tight')
 ###################################################################################################################################################

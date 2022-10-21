@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 #
-# Script for plotting figure 3.2. for altercation, make necessary comments and uncomments
+# Script for plotting figure 3.4. for altercation, make necessary comments and uncomments
 # of particular axes settings in the plotting section.
 #
 
@@ -16,7 +16,7 @@ import cartopy
 import cartopy.crs as ccrs
 from cartopy.util import add_cyclic_point
 
-figure_path = '/home/brandonsmith/climate-gcm-bps/plots/'
+figure_path = '/home/brandonsmith/climate_state_thesis/figures/'
 casenames = ['0.9','0.95','1.0','1.05']
 normalize = True
 

@@ -151,26 +151,6 @@ for CASENAME in casenames:
         Qvar = Qvar/float(CASENAME)
         Qvar = Qvar.squeeze()
         Qvar2 = Qvar2.squeeze()
-#            SWAS = SWAS.squeeze()
-#            LWAS = LWAS.squeeze()
-#            SWCS = SWCS.squeeze()
-#            LWCS = LWCS.squeeze()
-#            SWAS_2x = SWAS_2x.squeeze()
-#            LWAS_2x = LWAS_2x.squeeze()
-#            SWCS_2x = SWCS_2x.squeeze()
-#            LWCS_2x = LWCS_2x.squeeze()
-#            SWAS_4x = SWAS_4x.squeeze()
-#            LWAS_4x = LWAS_4x.squeeze()
-#            SWCS_4x = SWCS_4x.squeeze()
-#            LWCS_4x = LWCS_4x.squeeze()
-
-#            SCRE = SWAS - SWCS
-#            LCRE = LWCS - LWAS
-#            SCRE_2x = SWAS_2x - SWCS_2x
-#            LCRE_2x = LWAS_2x - LWCS_2x
-#            SCRE_4x = SWAS_4x - SWCS_4x
-#            LCRE_4x = LWAS_4x - LWCS_4x
-
 
         diffsn = (Dvar - Cvar)/rf[i]
         Qdiffsn = (Qvar - Cvar)/rfq[i]
@@ -214,10 +194,6 @@ for CASENAME in casenames:
         net.append(netCRF)
         net_d.append(netCRF_d)
         net_q.append(netCRF_q)
-#            scre.append(SCRE)
-#            lcre.append(LCRE)
-#            delta_s.append(diffS)
-#            delta_l.append(diffL)
         cn.append(float(casenames[i]))
 
         i+=1

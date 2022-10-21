@@ -15,12 +15,12 @@ from matplotlib.colors import Normalize
 import matplotlib.gridspec as gridspec
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
-figure_path = '/home/brandonsmith/climate-gcm-bps/plots/'
+figure_path = '/home/brandonsmith/climate_state_thesis/figures/'
 casenames = ['0.9','0.95','1.0','1.05']
 
 infield = 'V'
 field = 'V'
-normalize = True
+normalize = False
 # For creating smaller file for plotting. Opening parent model output data is too bulky.
 for CASENAME in casenames:
     run = 'Control'
@@ -281,5 +281,5 @@ plt.show()
 if normalize is False:
     fig.savefig(figure_path+'Zonal_Mean_streamfunction_2x_response.pdf',bbox_inches='tight')
 else:
-    fig.savefig(figure_path+'Zonal_Mean_streamfunction_2x_response.pdf',bbox_inches='tight')
+    fig.savefig(figure_path+'Zonal_Mean_streamfunction_n_response.pdf',bbox_inches='tight')
 ###################################################################################################################################################

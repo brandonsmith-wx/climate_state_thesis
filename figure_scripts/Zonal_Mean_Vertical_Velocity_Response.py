@@ -17,12 +17,12 @@ from matplotlib.colors import Normalize
 from matplotlib import cm
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 
-figure_path = '/home/brandonsmith/climate-gcm-bps/plots/'
+figure_path = '/home/brandonsmith/climate_state_thesis/figures/'
 casenames = ['0.9','0.95','1.0','1.05']
 
 field2 = 'OMEGAT'
 field = 'OMEGA'
-normalize = True
+normalize = False
 # For creating smaller file for plotting. Opening parent model output data is too bulky.
 for CASENAME in casenames:
     run = 'Control'
