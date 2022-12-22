@@ -21,7 +21,7 @@ from climlab import constants as const
 
 casenames = ['0.9','0.95','1.0','1.05']
 figure_path = '/home/brandonsmith/climate_state_thesis/figures/'
-normalize = False
+normalize = True
 
 # For creating smaller file for plotting. Opening parent model output data is too bulky.
 for CASENAME in casenames:
@@ -129,7 +129,12 @@ for CASENAME in casenames:
             # TOA radiation
             OLR = ncdata.variables['FLNT'][:]
             ASR = ncdata.variables['FSNT'][:]
-            Rtoa = ASR - OLR  # net downwelling radiation
+            Rtoa = ASR - OLR  
+            Rtoa = Rtoa.squeeze()
+            imbal = np.average(Rtoa, weights=np.cos(np.deg2rad(lat)))
+            Rtoa = Rtoa - imbal
+            
+            # net downwelling radiation
             #  surface fluxes  (all positive UP)
             LHF = ncdata.variables['LHFLX'][:]  # latent heat flux (evaporation)
             SHF = ncdata.variables['SHFLX'][:] # sensible heat flux
@@ -143,6 +148,11 @@ for CASENAME in casenames:
             EminusP = Evap.squeeze() - Precip.squeeze()  # kg/m2/s or mm/s
             SurfaceRadiation = LWsfc + SWsfc  # net upward radiation from surface
             SurfaceHeatFlux = SurfaceRadiation.squeeze() + LHF.squeeze() + SHF.squeeze() + SnowFlux.squeeze()  # net upward surface heat flux
+            imbal = np.average(SurfaceHeatFlux, weights=np.cos(np.deg2rad(lat)))
+            SurfaceHeatFlux = SurfaceHeatFlux - imbal
+            #SurfaceHeatFlux_corrected = SurfaceHeatFlux - imbal
+            
+            
             Fatmin = Rtoa.squeeze() + SurfaceHeatFlux.squeeze()  # net heat flux in to atmosphere
             
             # heat transport terms
@@ -152,7 +162,8 @@ for CASENAME in casenames:
             HT['ocean'] = inferred_heat_transport(-SurfaceHeatFlux, lat)
             HT['latent'] = inferred_heat_transport(EminusP*const.Lhvap, lat) # atm. latent heat transport from moisture imbal.
             HT['dse'] = HT['atm'] - HT['latent']  # dry static energy transport as residual
-
+            
+            
             #  annual averages
            # HTann = {}
             #for name, value in HTmonthly.iteritems():
@@ -257,15 +268,15 @@ for CASENAME in casenames:
     
     ax.set_xlim(-90,90)
     ax.set_yticks(yticks)
-    ax.set_yticklabels(yticks,fontsize=14)
+    ax.set_yticklabels(yticks,fontsize=12)
     ax.text(0.05, 0.9, Casenames[i], va='center', rotation='horizontal',transform=ax.transAxes,fontsize=16,color='black')
     if i == 0:
-        ax.set_title('Control Climates',fontsize=16)
+        ax.set_title('Control Climates',fontsize=14)
     if i == 3:
-        ax.set_xlabel('Latitude (Deg N)',fontsize=16)
-    ax.set_ylabel('Heat Tranport (PW)',fontsize=16)
+        ax.set_xlabel('Latitude (Deg N)',fontsize=14)
+    ax.set_ylabel('HT (PW)',fontsize=14)
     ax.set_xticks(ticks)
-    ax.set_xticklabels(ticks,fontsize=14)
+    ax.set_xticklabels(ticks,fontsize=12)
     #ax.legend(loc='upper left')
     ax.grid()
     
@@ -278,16 +289,16 @@ for CASENAME in casenames:
 
     ax2.set_xlim(-90,90)
     ax2.set_yticks(ydiffticks)
-    ax2.set_yticklabels(ydiffticks,fontsize=14)
+    ax2.set_yticklabels(ydiffticks,fontsize=12)
     if i == 0:
         if normalize is True:
-            ax2.set_title('$F_2$$_x$ Response',fontsize=16)
+            ax2.set_title('$F_2$$_x$ Response',fontsize=14)
         else:
-            ax2.set_title('$CO_2$ Doubling Response',fontsize=16)
+            ax2.set_title('$CO_2$ Doubling Response',fontsize=14)
     if i == 3:
-        ax2.set_xlabel('Latitude (Deg N)',fontsize=16)
+        ax2.set_xlabel('Latitude (Deg N)',fontsize=14)
     ax2.set_xticks(ticks)
-    ax2.set_xticklabels(ticks,fontsize=14)
+    ax2.set_xticklabels(ticks,fontsize=12)
     #ax2.legend(loc='upper left')
     ax2.grid()
     
@@ -300,13 +311,13 @@ for CASENAME in casenames:
 
     ax3.set_xlim(-90,90)
     ax3.set_yticks(ydiffticks)
-    ax3.set_yticklabels(ydiffticks,fontsize=14)
+    ax3.set_yticklabels(ydiffticks,fontsize=12)
     if i == 0:
-        ax3.set_title('Difference W.R.T. $S_0$',fontsize=16)
+        ax3.set_title('Difference W.R.T. $S_0$',fontsize=14)
     if i == 3:
-        ax3.set_xlabel('Latitude (Deg N)',fontsize=16)
+        ax3.set_xlabel('Latitude (Deg N)',fontsize=14)
     ax3.set_xticks(ticks)
-    ax3.set_xticklabels(ticks,fontsize=14)
+    ax3.set_xticklabels(ticks,fontsize=12)
     #ax3.legend(loc='upper left')
     ax3.grid()
     
@@ -319,16 +330,16 @@ for CASENAME in casenames:
 
     ax4.set_xlim(-90,90)
     ax4.set_yticks(ydiffticks)
-    ax4.set_yticklabels(ydiffticks,fontsize=14)
+    ax4.set_yticklabels(ydiffticks,fontsize=12)
     if i == 0:
         if normalize is True:
-            ax4.set_title('$F_4$$_x$ Response',fontsize=16)
+            ax4.set_title('$F_4$$_x$ Response',fontsize=14)
         else:
-            ax4.set_title('$CO_2$ Quadrupling Response',fontsize=16)
+            ax4.set_title('$CO_2$ Quadrupling Response',fontsize=14)
     if i == 3:
         ax4.set_xlabel('Latitude (Deg N)',fontsize=16)
     ax4.set_xticks(ticks)
-    ax4.set_xticklabels(ticks,fontsize=14)
+    ax4.set_xticklabels(ticks,fontsize=12)
     #ax4.legend(loc='upper left')
     ax4.grid()
     
@@ -341,21 +352,21 @@ for CASENAME in casenames:
 
     ax5.set_xlim(-90,90)
     ax5.set_yticks(ydiffticks)
-    ax5.set_yticklabels(ydiffticks,fontsize=14)
+    ax5.set_yticklabels(ydiffticks,fontsize=12)
     if i == 0:
-        ax5.set_title('Difference W.R.T. $S_0$',fontsize=16)
+        ax5.set_title('Difference W.R.T. $S_0$',fontsize=14)
     if i == 3:
-        ax5.set_xlabel('Latitude (Deg N)',fontsize=16)
+        ax5.set_xlabel('Latitude (Deg N)',fontsize=14)
     ax5.set_xticks(ticks)
-    ax5.set_xticklabels(ticks,fontsize=14)
+    ax5.set_xticklabels(ticks,fontsize=12)
     #ax5.legend(loc='upper left')
     ax5.grid()
 
     i +=1
 if normalize is False:
-    fig.suptitle('Poleward Heat Transport Response to $CO_2$ Doubling',fontsize=24)
+    fig.suptitle('Poleward Heat Transport Response to $CO_2$ Doubling',fontsize=24,y=1.02)
 else:
-    fig.suptitle('Poleward Heat Transport Response to Equivalent Radiative Forcing',fontsize=24)
+    fig.suptitle('Poleward Heat Transport Response to Equivalent Radiative Forcing',fontsize=24,y=1.02)
 
 handles, labels = ax.get_legend_handles_labels()
 fig.legend(handles,labels,loc = (0.35, 0.92), ncol=5 )

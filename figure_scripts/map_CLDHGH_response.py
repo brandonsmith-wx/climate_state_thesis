@@ -54,7 +54,7 @@ for CASENAME in casenames:
 
 # Load variables and perform calculations from outfiles
 i = 0
-fig = plt.figure(figsize=(20,10))
+fig = plt.figure(figsize=(20,10),rasterized=True)
 outfile_1C = '/home/brandonsmith/modeloutput/Control/1.0/map_CLDHGH_Control_1.0.nc'
 outfile_1D = '/home/brandonsmith/modeloutput/2xCO2/1.0/map_CLDHGH_2xCO2_1.0.nc'
 outfile_1Q = '/home/brandonsmith/modeloutput/4xCO2/1.0/map_CLDHGH_4xCO2_1.0.nc'

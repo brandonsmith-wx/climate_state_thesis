@@ -20,7 +20,7 @@ casenames = ['0.9','0.95','1.0','1.05']
 
 field = 'U'
 field2 = 'V'
-normalize = False
+normalize = True
 for CASENAME in casenames:
     run = 'Control'
     inpath = '/home/brandonsmith/modeloutput/'+run+'/'+CASENAME
@@ -54,7 +54,7 @@ for CASENAME in casenames:
 
 # Load variables and perform calculations from outfiles
 i = 0
-fig = plt.figure(figsize=(20,10))
+fig = plt.figure(figsize=(20,10),rasterized=True)
 outfile_1C = '/home/brandonsmith/modeloutput/Control/1.0/map_winds_and_variances_L_Control_1.0.nc'
 outfile_1D = '/home/brandonsmith/modeloutput/2xCO2/1.0/map_winds_and_variances_L_2xCO2_1.0.nc'
 outfile_1Q = '/home/brandonsmith/modeloutput/4xCO2/1.0/map_winds_and_variances_L_4xCO2_1.0.nc'
@@ -206,9 +206,9 @@ for CASENAME in casenames:
         ax2.coastlines()
         if i == 0:
             if normalize is False:
-                plt.title('Response to $CO_2$ Doubling',fontsize=14)
+                plt.title('Response to $CO_2$ Doubling',fontsize=16)
             else:
-                plt.title('Response to $F_2$$_x$',fontsize=14)
+                plt.title('$F_2$$_x$ Response',fontsize=16)
         if i == 1:
             cticks=np.around(np.linspace(-15,15,7),decimals=3)
             cbar_ax = fig.add_axes([0.22,-0.05,0.15,0.02])
@@ -222,7 +222,7 @@ for CASENAME in casenames:
         cs3 = ax3.contourf(Lon,lat,diff,101,transform=ccrs.PlateCarree(),cmap='RdBu_r',vmin=-15,vmax=15)
         ax3.coastlines()
         if i == 0:
-            plt.title('Difference w.r.t. $S_0$',fontsize=14)
+            plt.title('Difference w.r.t. $S_0$',fontsize=16)
         if i == 0:
             cticks=np.around(np.linspace(-10,10,5),decimals=3)
             cbar_ax = fig.add_axes([0.42,-0.05,0.15,0.02])
@@ -237,9 +237,9 @@ for CASENAME in casenames:
         ax4.coastlines()
         if i == 0:
             if normalize is False:
-                plt.title('Response to $CO_2$ Quadrupling',fontsize=14)
+                plt.title('Response to $CO_2$ Quadrupling',fontsize=16)
             else:
-                plt.title('Response to $F_4$$_x$',fontsize=14)
+                plt.title('$F_4$$_x$ Response',fontsize=16)
         if i == 0:
             cticks=np.around(np.linspace(-15,15,7),decimals=3)
             cbar_ax = fig.add_axes([0.62,-0.05,0.15,0.02])
@@ -253,7 +253,7 @@ for CASENAME in casenames:
         cs5 = ax5.contourf(Lon,lat,Qdiff,101,transform=ccrs.PlateCarree(),cmap='RdBu_r',vmin=-15,vmax=15)
         ax5.coastlines()
         if i == 0:
-            plt.title('Difference w.r.t. $S_0$',fontsize=14)
+            plt.title('Difference w.r.t. $S_0$',fontsize=16)
         if i == 0:
             cticks=np.around(np.linspace(-15,15,7),decimals=3)
             cbar_ax = fig.add_axes([0.82,-0.05,0.15,0.02])
@@ -281,7 +281,7 @@ for CASENAME in casenames:
 if normalize is False:
     plt.suptitle('Low Altitude (Surface to 700hPa) Eddy Kinetic Energy Response to $CO_2$ Doublings',fontsize=24,y=1.01)
 else:
-    plt.suptitle('Low Altitude (Surface to 700hPa) Eddy Kinetic Energy Response to Equivalent Radiative Forcing',fontsize=24,y=1.01)
+    plt.suptitle('Low Altitude (Surface to 700hPa) Eddy Kinetic Energy Response to Equivalent Radiative Forcing',fontsize=22,y=1.01)
 fig.tight_layout(pad=0.2)
 plt.show()
 if normalize is False:

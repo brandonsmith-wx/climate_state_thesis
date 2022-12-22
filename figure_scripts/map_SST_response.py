@@ -55,7 +55,7 @@ for CASENAME in casenames:
             
 # Load variables and perform calculations from outfiles
 i = 0
-fig = plt.figure(figsize=(20,10))
+fig = plt.figure(figsize=(20,10),rasterized=True)
 outfile_1C = '/home/brandonsmith/modeloutput/Control/1.0/map_SST_Control_1.0.nc'
 outfile_1D = '/home/brandonsmith/modeloutput/2xCO2/1.0/map_SST_2xCO2_1.0.nc'
 outfile_1Q = '/home/brandonsmith/modeloutput/4xCO2/1.0/map_SST_4xCO2_1.0.nc'
@@ -174,15 +174,15 @@ for CASENAME in casenames:
             cb2.set_ticklabels(cticks.astype(int).astype(str),fontsize=12)
            # cb2.formatter.set_powerlimits((0,0))
         ax3 = fig.add_subplot(4,5,5*i+3,projection=ccrs.Robinson())
-        cs3 = ax3.contourf(Lon,lat,diff,201,transform=ccrs.PlateCarree(),cmap='RdBu_r',vmin=-15,vmax=15)
+        cs3 = ax3.contourf(Lon,lat,diff,201,transform=ccrs.PlateCarree(),cmap='RdBu_r',vmin=-5,vmax=5)
         #ax3.coastlines()
         ax3.add_feature(cartopy.feature.LAND, zorder=100, edgecolor='k')
         if i == 0:
             plt.title('Difference w.r.t. $S_0$',fontsize=18)
         if i == 0:
-            cticks=np.around(np.linspace(-15,15,11),decimals=2)
+            cticks=np.around(np.linspace(-5,5,11),decimals=2)
             cbar_ax = fig.add_axes([0.42,-0.05,0.15,0.02])
-            cb3 = fig.colorbar(mappable=None, norm=Normalize(vmin=-15,vmax=15), cmap='RdBu_r',spacing='proportional',orientation='horizontal',cax=cbar_ax,ticks=cticks)
+            cb3 = fig.colorbar(mappable=None, norm=Normalize(vmin=-5,vmax=5), cmap='RdBu_r',spacing='proportional',orientation='horizontal',cax=cbar_ax,ticks=cticks)
             #cb3 = fig.colorbar(cs3,spacing='uniform',orientation='horizontal',cax=cbar_ax,ticks=cticks)
             cb3.set_label('Difference',fontsize=14)
             #cb3.formatter.set_powerlimits((0,0))
@@ -207,15 +207,15 @@ for CASENAME in casenames:
             #cb4.set_ticklabels(cticks.astype(str),fontsize=12)
             cb4.set_ticklabels(cticks.astype(int).astype(str),fontsize=12)
         ax5 = fig.add_subplot(4,5,5*i+5,projection=ccrs.Robinson())
-        cs5 = ax5.contourf(Lon,lat,Qdiff,201,transform=ccrs.PlateCarree(),cmap='RdBu_r',vmin=-15,vmax=15)
+        cs5 = ax5.contourf(Lon,lat,Qdiff,201,transform=ccrs.PlateCarree(),cmap='RdBu_r',vmin=-5,vmax=5)
         #ax5.coastlines()
         ax5.add_feature(cartopy.feature.LAND, zorder=100, edgecolor='k')
         if i == 0:
             plt.title('Difference w.r.t. $S_0$',fontsize=18)
         if i == 0:
-            cticks=np.around(np.linspace(-15,15,11),decimals=2)
+            cticks=np.around(np.linspace(-5,5,11),decimals=2)
             cbar_ax = fig.add_axes([0.82,-0.05,0.15,0.02])
-            cb5 = fig.colorbar(mappable=None, norm=Normalize(vmin=-15,vmax=15), cmap='RdBu_r',spacing='proportional',orientation='horizontal',cax=cbar_ax,ticks=cticks)
+            cb5 = fig.colorbar(mappable=None, norm=Normalize(vmin=-5,vmax=5), cmap='RdBu_r',spacing='proportional',orientation='horizontal',cax=cbar_ax,ticks=cticks)
             #cb3 = fig.colorbar(cs3,spacing='uniform',orientation='horizontal',cax=cbar_ax,ticks=cticks)
             cb5.set_label('Difference',fontsize=14)
             #cb3.formatter.set_powerlimits((0,0))
@@ -236,12 +236,12 @@ for CASENAME in casenames:
         print('No such file or directory: '+dsloc_control+' or '+dsloc_4xco2)
 
 if normalize is True:
-    plt.suptitle('Sea Surface Temperature Response to Equivalent Radiative Forcing',fontsize=24)
+    plt.suptitle('Sea Surface Temperature Response to Equivalent Radiative Forcing',fontsize=24,y=1.01)
 else:
-    plt.suptitle('Sea Surface Temperature Response to $CO_2$ Doublings',fontsize=24)
+    plt.suptitle('Sea Surface Temperature Response to $CO_2$ Doublings',fontsize=24,y=1.01)
 fig.tight_layout(pad=0.2)
 plt.show()
 if normalize is True:
-    fig.savefig(figure_path+'map_SST_2x_response.pdf',bbox_inches='tight')
+    fig.savefig(figure_path+'map_SST_n_response.pdf',bbox_inches='tight')
 else:
     fig.savefig(figure_path+'map_SST_2x_response.pdf',bbox_inches='tight')

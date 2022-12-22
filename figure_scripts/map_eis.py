@@ -12,6 +12,7 @@ import numpy as np
 import netCDF4
 import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
+import cartopy
 import cartopy.crs as ccrs
 from cartopy.util import add_cyclic_point
 
@@ -319,7 +320,8 @@ for CASENAME in casenames:
         #plot variable
         ax = fig.add_subplot(4,5,5*i+1,projection=ccrs.Robinson())
         cs = ax.contourf(Lon,lat,Cvar,21,transform=ccrs.PlateCarree(),cmap='PRGn',vmin=-40,vmax=40)
-        ax.coastlines()
+        #ax.coastlines()
+        ax.add_feature(cartopy.feature.LAND, zorder=100, edgecolor='k')
         #ax.set_ylabel('Solar Multiplier: '+CASENAME,fontsize=14)
         if i == 0:
             plt.title('Base Climate Comparison',fontsize=14)
@@ -334,7 +336,8 @@ for CASENAME in casenames:
         ax.text(0.03, 0.5, Casenames[i], va='center', rotation='horizontal',transform=ax.transAxes,fontsize=14,color='black')
         ax2 = fig.add_subplot(4,5,5*i+2,projection=ccrs.Robinson())
         cs2 = ax2.contourf(Lon,lat,doubling_response,30,transform=ccrs.PlateCarree(),cmap='PRGn',vmin=-10,vmax=10)
-        ax2.coastlines()
+        #ax2.coastlines()
+        ax2.add_feature(cartopy.feature.LAND, zorder=100, edgecolor='k')
         if i == 0:
             if normalize is True:
                 ax2.set_title('$F_2$$_x$ Response',fontsize=16)
@@ -352,7 +355,8 @@ for CASENAME in casenames:
            # cb2.formatter.set_powerlimits((0,0))
         ax3 = fig.add_subplot(4,5,5*i+3,projection=ccrs.Robinson())
         cs3 = ax3.contourf(Lon,lat,diff,30,transform=ccrs.PlateCarree(),cmap='PRGn',vmin=-10,vmax=10)
-        ax3.coastlines()
+        #ax3.coastlines()
+        ax3.add_feature(cartopy.feature.LAND, zorder=100, edgecolor='k')
         if i == 0:
             plt.title('Difference w.r.t. $S_0$',fontsize=14)
         if i == 0:
@@ -366,7 +370,8 @@ for CASENAME in casenames:
             cb3.set_ticklabels(cticks.astype(int).astype(str),fontsize=12)
         ax4 = fig.add_subplot(4,5,5*i+4,projection=ccrs.Robinson())
         cs4 = ax4.contourf(Lon,lat,Quad_response,30,transform=ccrs.PlateCarree(),cmap='PRGn',vmin=-10,vmax=10)
-        ax4.coastlines()
+        #ax4.coastlines()
+        ax4.add_feature(cartopy.feature.LAND, zorder=100, edgecolor='k')
         if i == 0:
             if normalize is True:
                 ax4.set_title('$F_4$$_x$ Response',fontsize=16)
@@ -383,7 +388,8 @@ for CASENAME in casenames:
             cb4.set_ticklabels(cticks.astype(int).astype(str),fontsize=12)
         ax5 = fig.add_subplot(4,5,5*i+5,projection=ccrs.Robinson())
         cs5 = ax5.contourf(Lon,lat,Qdiff,30,transform=ccrs.PlateCarree(),cmap='PRGn',vmin=-10,vmax=10)
-        ax5.coastlines()
+        #ax5.coastlines()
+        ax5.add_feature(cartopy.feature.LAND, zorder=100, edgecolor='k')
         if i == 0:
             plt.title('Difference w.r.t. $S_0$',fontsize=14)
         if i == 0:

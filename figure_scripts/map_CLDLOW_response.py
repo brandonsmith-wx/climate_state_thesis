@@ -20,7 +20,7 @@ casenames = ['0.9','0.95','1.0','1.05']
 
 field = 'CLDLOW'
 field2 = 'CLDHGH'
-normalize = True
+normalize = False
 for CASENAME in casenames:
     run = 'Control'
     inpath = '/home/brandonsmith/modeloutput/'+run+'/'+CASENAME
@@ -54,7 +54,7 @@ for CASENAME in casenames:
 
 # Load variables and perform calculations from outfiles
 i = 0
-fig = plt.figure(figsize=(20,10))
+fig = plt.figure(figsize=(20,10),rasterized=True)
 outfile_1C = '/home/brandonsmith/modeloutput/Control/1.0/map_CLDLOW_Control_1.0.nc'
 outfile_1D = '/home/brandonsmith/modeloutput/2xCO2/1.0/map_CLDLOW_2xCO2_1.0.nc'
 outfile_1Q = '/home/brandonsmith/modeloutput/4xCO2/1.0/map_CLDLOW_4xCO2_1.0.nc'
@@ -234,7 +234,7 @@ for CASENAME in casenames:
 
 #    cb.set_label('Temperature (K)')
 if normalize is False:
-    plt.suptitle('Low Cloud Fraction Response to $CO_2$ Doubing',fontsize=24)
+    plt.suptitle('Low Cloud Fraction Response to $CO_2$ Doubing',fontsize=24,y=1.02)
 else:
     plt.suptitle('Low Cloud Fraction Response to Added Radiative Forcing',fontsize=24,y=1.02)
 fig.tight_layout(pad=0.2)

@@ -18,7 +18,7 @@ from cartopy.util import add_cyclic_point
 
 figure_path = '/home/brandonsmith/climate_state_thesis/figures/'
 casenames = ['0.9','0.95','1.0','1.05']
-normalize = True
+normalize = False
 
 field = 'TS'
 field2 = 'TREFHT'
@@ -55,7 +55,7 @@ for CASENAME in casenames:
 
 # Load variables and perform calculations from outfiles
 i = 0
-fig = plt.figure(figsize=(20,10))
+fig = plt.figure(figsize=(20,10),rasterized=True)
 outfile_1C = '/home/brandonsmith/modeloutput/Control/1.0/map_TS_Control_1.0.nc'
 outfile_1D = '/home/brandonsmith/modeloutput/2xCO2/1.0/map_TS_2xCO2_1.0.nc'
 outfile_1Q = '/home/brandonsmith/modeloutput/4xCO2/1.0/map_TS_4xCO2_1.0.nc'
@@ -146,7 +146,7 @@ for CASENAME in casenames:
         #ax.add_feature(cartopy.feature.LAND, zorder=100, edgecolor='k')
         #ax.set_ylabel('Solar Multiplier: '+CASENAME,fontsize=14)
         if i == 0:
-            plt.title('Base Climate Comparison',fontsize=18)
+            plt.title('Base Climate Comparison',fontsize=16)
         if i == 0:
             cticks=np.around(np.linspace(210,310,11),decimals=1)
             cbar_ax = fig.add_axes([0.02,-0.05,0.15,0.02])
@@ -162,9 +162,9 @@ for CASENAME in casenames:
         #ax2.add_feature(cartopy.feature.LAND, zorder=100, edgecolor='k')
         if i == 0:
             if normalize is False:
-                plt.title('Response to $CO_2$ Doubling',fontsize=18)
+                plt.title('Response to $CO_2$ Doubling',fontsize=16)
             else:
-                plt.title('Response to $F_2$$_x$',fontsize=18)
+                plt.title('Response to $F_2$$_x$',fontsize=16)
         if i == 1:
             cticks=np.around(np.linspace(-20,20,5),decimals=2)
             cbar_ax = fig.add_axes([0.22,-0.05,0.15,0.02])
@@ -179,7 +179,7 @@ for CASENAME in casenames:
         ax3.coastlines()
         #ax3.add_feature(cartopy.feature.LAND, zorder=100, edgecolor='k')
         if i == 0:
-            plt.title('Difference w.r.t. $S_0$',fontsize=18)
+            plt.title('Difference w.r.t. $S_0$',fontsize=16)
         if i == 0:
             cticks=np.around(np.linspace(-20,20,5),decimals=2)
             cbar_ax = fig.add_axes([0.42,-0.05,0.15,0.02])
@@ -195,9 +195,9 @@ for CASENAME in casenames:
         #ax4.add_feature(cartopy.feature.LAND, zorder=100, edgecolor='k')
         if i == 0:
             if normalize is False:
-                plt.title('Response to $CO_2$ Quadrupling',fontsize=18)
+                plt.title('Response to $CO_2$ Quadrupling',fontsize=16)
             else:
-                plt.title('Response to $F_4$$_x$',fontsize=18)
+                plt.title('Response to $F_4$$_x$',fontsize=16)
         if i == 0:
             cticks=np.around(np.linspace(-20,20,5),decimals=2)
             cbar_ax = fig.add_axes([0.62,-0.05,0.15,0.02])
@@ -212,7 +212,7 @@ for CASENAME in casenames:
         ax5.coastlines()
         #ax5.add_feature(cartopy.feature.LAND, zorder=100, edgecolor='k')
         if i == 0:
-            plt.title('Difference w.r.t. $S_0$',fontsize=18)
+            plt.title('Difference w.r.t. $S_0$',fontsize=16)
         if i == 0:
             cticks=np.around(np.linspace(-20,20,5),decimals=2)
             cbar_ax = fig.add_axes([0.82,-0.05,0.15,0.02])
@@ -228,9 +228,9 @@ for CASENAME in casenames:
 
 #    cb.set_label('Temperature (K)')
 if normalize is False:
-    plt.suptitle('Surface Temperature Response to $CO_2$ Doubling',fontsize=24)
+    plt.suptitle('Surface Temperature Response to $CO_2$ Doubling',fontsize=24,y=1.01)
 else:
-    plt.suptitle('Surface Temperature Response to Equivalent Radiative Forcing',fontsize=24)
+    plt.suptitle('Surface Temperature Response to Equivalent Radiative Forcing',fontsize=24,y=1.01)
 fig.tight_layout(pad=0.2)
 plt.show()
 if normalize is False:
