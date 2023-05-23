@@ -1,5 +1,9 @@
-# climate_state_thesis
+
 repository containing files pertinent to Brandon Smith's M.Sc. Thesis from the University of Victoria, and to the end of creating a publication.
+
+model output data in its base form is located in the directory titled "Model_Output_FRDR", whereas model output that has been processed by figure plotting scripts is titled "modeloutput". In the model output directories, files are first sorted by initial CO2 concentrations, 2xCO2 experiments, and 4xCO2 experiments. Within each, it is further sorted into which background climate state the output belongs to, indicated by that state's solar constant multiplier (0.9, 0.95, 1.0, 1.05).
+
+within "climate_state_thesis", the directory "figure_scripts" contains the python scripts that create the figures that are used in the final copy of the thesis. Each script is ready to run as it is, and should create the figure as it is presented in the thesis.
 
 This repository contains python scripts that call upon CESM model output data stored on FDRD (insert link). If you wish to utilize the scripts in this repository to re-create the figures contained in the thesis, please download the model output from their database and adjust the file paths called in each script to where you store the copy of said model output. For example, from the file "map_TS_response.py" line 27:
 
